@@ -1,0 +1,25 @@
+*,:before,:after{box-sizing:border-box}
+html,body{height:100%;width:100%}
+body{padding:3rem 0 3rem}
+.header{background:#ccc;height:3rem;left:0;position:fixed;top:0;width:100%;z-index:1000}
+.footer{background:#396;bottom:0;height:3rem;left:0;position:fixed;width:100%;z-index:1000}
+.tt{height:100%;overflow:hidden;position:relative;width:100%}
+.tt__static{background-color:#def;height:100%;left:0;position:absolute;top:0;width:100%}
+.tt__scroller{height:100%;font-size:0;left:0;position:absolute;top:0;width:100%;white-space:nowrap}
+.tt__section{display:inline-block;font-size:1rem;height:100%;position:relative;width:100%}
+.car{background-color:#222;border-top-left-radius:.5rem;border-top-right-radius:.5rem;bottom:.5rem;height:2rem;position:absolute;left:3rem;width:2rem;z-index:50}
+.car:before{background-color:#222;border-bottom-left-radius:.25rem;border-top-left-radius:.25rem;bottom:0;content:'';height:1rem;position:absolute;right:100%;width:1rem}
+.car:after{background-color:#222;border-bottom-right-radius:.25rem;border-top-right-radius:.5rem;bottom:0;content:'';height:1rem;left:100%;position:absolute;width:1rem}
+.celestial{top:0;height:300%;position:absolute;width:100%;z-index:50}
+.sun,.moon{border-radius:50%;display:block;height:100px;left:50%;margin-left:-50px;position:absolute;width:100px}
+.sun{background-color:#ff0;top:1rem}
+.moon{background-color:#fff;bottom:1rem}
+.sign{background-color:#ff0;border-radius:.5rem;bottom:4rem;height:5rem;padding:.5rem;position:absolute;text-align:center;right:3rem;width:7rem}
+.sign:before{background-color:#333;top:100%;content:'';height:4rem;left:1rem;position:absolute;width:.25rem}
+.sign:after{background-color:#333;top:100%;content:'';height:4rem;position:absolute;right:1rem;width:.25rem}
+.video-container{left:50%;position:absolute;bottom:3rem}
+.video-container:before{background-color:#333;top:100%;content:'';height:4rem;left:3rem;position:absolute;width:.25rem}
+.video-container:after{background-color:#333;top:100%;content:'';height:4rem;position:absolute;right:3rem;width:.25rem}
+.balloon{background-color:#f426a2;bottom:40px;border-radius:50%;height:100px;left:50%;position:absolute;width:100px}
+.balloon:before{background-color:transparent;border-left:1px solid #000;border-right:1px solid #000;content:'';height:20px;left:50%;margin-left:-10px;position:absolute;top:100%;width:20px}
+.balloon:after{background-color:#000;content:'';height:20px;left:50%;margin-left:-10px;margin-top:20px;position:absolute;top:100%;width:20px}
