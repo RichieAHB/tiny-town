@@ -16,8 +16,11 @@ body {
 
 .header {
 	background: #ccc;
+	border-bottom: 3px solid #234;
 	height: $header_height;
 	left: 0;
+	line-height: 1rem;
+	padding: 1rem;
 	position: fixed;
 	top: 0;
 	width: 100%;
@@ -147,9 +150,9 @@ body {
 	width: 5px;
 }
 
-.celestial {
+.celestial-bodies {
 	top: 0;
-	height: 300%;
+	height: 250%;
 	position: absolute;
 	width: 100%;
 	z-index: 50;

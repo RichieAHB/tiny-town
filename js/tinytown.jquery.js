@@ -77,7 +77,6 @@
 			var startTime = Date.now();
 			var duration = 1000;
 			var timer = setInterval(function(){
-				if (true) {};
 				var t = Date.now() - startTime;
 				if (t > duration) {
 					clearInterval(timer);

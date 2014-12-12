@@ -17,7 +17,7 @@ generateStars(100);
 $('#tt').tinyTown({
 	syncedElements: [
 		{
-			selector: '.celestial',
+			selector: '.celestial-bodies',
 			animations: [{
 				type: 'rotate',
 				end: -180
@@ -47,7 +47,7 @@ $('#tt').tinyTown({
 			animations: [{
 				type: 'up',
 				end: 'out',
-				startPercentage: 0.5,
+				startPercentage: 0.4,
 				endPercentage: 0.6
 			}]
 		},{

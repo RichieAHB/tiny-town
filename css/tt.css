@@ -1,7 +1,7 @@
 *,:before,:after{box-sizing:border-box}
 html,body{height:100%;width:100%}
 body{padding:3rem 0 3rem}
-.header{background:#ccc;height:3rem;left:0;position:fixed;top:0;width:100%;z-index:1000}
+.header{background:#ccc;border-bottom:3px solid #234;height:3rem;left:0;line-height:1rem;padding:1rem;position:fixed;top:0;width:100%;z-index:1000}
 .footer{border-top:3px solid #234;bottom:0;height:3rem;left:0;line-height:1rem;padding:1rem;position:fixed;width:100%;z-index:1000}
 .tt{height:100%;overflow:hidden;position:relative;width:100%}
 .tt__static{background-color:#def;height:100%;left:0;position:absolute;top:0;width:100%}
@@ -14,7 +14,7 @@ body{padding:3rem 0 3rem}
 .car:after{border:3px solid #234;border-radius:50%;content:'';height:1rem;position:absolute;right:0;top:100%;width:1rem}
 .stars{opacity:0}
 .star{background-color:#fff;border-radius:5px;height:5px;position:absolute;width:5px}
-.celestial{top:0;height:300%;position:absolute;width:100%;z-index:50}
+.celestial-bodies{top:0;height:250%;position:absolute;width:100%;z-index:50}
 .sun,.moon{border-radius:50%;display:block;height:100px;left:50%;margin-left:-50px;position:absolute;width:100px}
 .sun{background-color:#D8A12D;border:3px solid #234;top:1rem}
 .moon{box-shadow:20px -20px 0 #def;background-color:#fff;bottom:1rem}
