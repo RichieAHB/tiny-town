@@ -25,10 +25,12 @@ body {
 }
 
 .footer {
-	background: #396;
+	border-top: 3px solid #234;
 	bottom: 0;
 	height: $footer_height;
 	left: 0;
+	line-height: 1rem;
+	padding: 1rem;
 	position: fixed;
 	width: 100%;
 	z-index: 1000;
@@ -60,7 +62,7 @@ body {
 	white-space: nowrap;
 }
 
-.tt__section {
+.section {
 	display: inline-block;
 	font-size: 1rem;
 	height: 100%;
@@ -71,40 +73,78 @@ body {
 /*
  * Objects
  */
+.building {
+	background-color: #562826;
+	bottom: 0;
+	color: #fff;
+	height: 150px;
+	left: 25%;
+	padding: 1rem;
+	position: absolute;
+	text-align: center;
+	text-transform: uppercase;
+	width: 200px;
+	z-index: 50;
+
+	&:after {
+		border-style: solid;
+		border-width: 0 100px 100px 100px;
+		border-color: transparent transparent #562926 transparent;
+		content: '';
+		display: block;
+		height: 0;
+		left: 0;
+		position: absolute;
+		bottom: 100%;
+		width: 0;
+	}
+}
+
  .car {
-	background-color: #222;
+ 	background-color: #fff;
+	border: 3px solid #234;
 	border-top-left-radius: 0.5rem;
-	border-top-right-radius: 0.5rem;
-	bottom: 0.5rem;
+	border-top-right-radius: 2rem;
+	bottom: 0.75rem;
 	height: 2rem;
 	position: absolute;
 	left: 3rem;
-	width: 2rem;
-	z-index: 50;
+	width: 4rem;
+	z-index: 100;
 }
 
 .car:before {
-	background-color: #222;
-	border-bottom-left-radius: 0.25rem;
-	border-top-left-radius: 0.25rem;
-	bottom: 0;
+	border: 3px solid #234;
+	border-radius: 50%;
 	content: '';
 	height: 1rem;
+	left: 0;
 	position: absolute;
-	right: 100%;
+	top: 100%;
 	width: 1rem;
 }
 
 .car:after {
-	background-color: #222;
-	border-bottom-right-radius: 0.25rem;
-	border-top-right-radius: 0.5rem;
-	bottom: 0;
+	border: 3px solid #234;
+	border-radius: 50%;
 	content: '';
 	height: 1rem;
-	left: 100%;
 	position: absolute;
+	right: 0;
+	top: 100%;
 	width: 1rem;
+}
+
+.stars {
+	opacity: 0;
+}
+
+.star {
+	background-color: #fff;
+	border-radius: 5px;
+	height: 5px;
+	position: absolute;
+	width: 5px;
 }
 
 .celestial {
@@ -126,19 +166,22 @@ body {
 }
 
 .sun {
-	background-color: yellow;
+	background-color: #D8A12D;
+	border: 3px solid #234;
 	top: 1rem;
 }
 
 .moon {
+	box-shadow: 20px -20px 0 #ddeeff;
 	background-color: white;
 	bottom: 1rem;
 }
 
 .sign {
-	background-color: yellow;
+	background-color: #fff;
+	border: 3px solid #234;
 	border-radius: 0.5rem;
-	bottom: 4rem;
+	bottom: 30px;
 	height: 5rem;
 	padding: 0.5rem;
 	position: absolute;
@@ -148,23 +191,13 @@ body {
 }
 
 .sign:before {
-	background-color: #333;
-	top: 100%;
+	border: 3px solid #234;
 	content: '';
-	height: 4rem;
-	left: 1rem;
+	height: 36px;
+	left: 25%;
 	position: absolute;
-	width: 0.25rem;
-}
-
-.sign:after {
-	background-color: #333;
 	top: 100%;
-	content: '';
-	height: 4rem;
-	position: absolute;
-	right: 1rem;
-	width: 0.25rem;
+	width: 50%;
 }
 
 .video-container {
@@ -194,8 +227,9 @@ body {
 }
 
 .balloon {
-	background-color: #f426a2;
-	bottom: 40px;
+	border: 3px solid #234;
+	background-color: #fff;
+	bottom: 37px;
 	border-radius: 50%;
 	height: 100px;
 	left: 50%;
@@ -205,8 +239,8 @@ body {
 
 .balloon:before {
 	background-color: transparent;
-	border-left: 1px solid #000;
-	border-right: 1px solid #000;
+	border-left: 3px solid #234;
+	border-right: 3px solid #234;
 	content: '';
 	height: 20px;
 	left: 50%;
@@ -217,7 +251,7 @@ body {
 }
 
 .balloon:after {
-	background-color: #000;
+	background-color: #234;
 	content: '';
 	height: 20px;
 	left: 50%;
