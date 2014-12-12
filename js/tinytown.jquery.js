@@ -3,8 +3,8 @@
 	var defaults = {
 		scroller: '.tt__scroller',
 		scrollRatio: 0.25,
-		sections: '.tt__section',
-		syncedAnimations: false
+		sections: '.section',
+		syncedElements: false
 	};
 
 	var settings;
@@ -13,9 +13,9 @@
 	var $container;
 	var $scroller;
 	var $sections;
-	var syncedAnimations;
 	var maxScroll;
 	var currentScrollPos = 0;
+	var xPc = 0;
 	var lastPageY;
 
 	function Plugin( element, options ) {
@@ -27,7 +27,7 @@
 		$scroller = $container.find(settings.scroller);
 		$sections = $scroller.find(settings.sections);
 		$syncedScrollers = $container.find(settings.syncedScrollers);
-		syncedAnimations = settings.syncedAnimations;
+		$navItems = $(settings.navItemSelector);
 
 		this._defaults = defaults;
 		this._name = pluginName;
@@ -38,95 +38,140 @@
 	Plugin.prototype = {
 
 		init: function() {
-			this.setDimensions();
+			this.setMaxScroll();
 			this.addScrollerHandler();
+			this.addClickHandler();
 		},
 
-		setDimensions: function() {
+		setMaxScroll: function() {
 			maxScroll = -($sections.length - 1) * $container.width();
 		},
 
 		addScrollerHandler: function(e) {
 			$container.on('DOMMouseScroll mousewheel touchmove', function(e){
 				e.preventDefault();
-				var scrollDelta = self.getScrollDelta(e);
-				currentScrollPos = Math.min(0, Math.max(maxScroll, scrollDelta + currentScrollPos));
-				var scrollPercentage = currentScrollPos / maxScroll;
+				self.updatePositions(e);
+				self.animate();
+			});
+		},
 
-				$scroller.css({
-					transform: 'translate3d(' + currentScrollPos + 'px,0,0)'
-				});
+		animate: function() {
+			self.updatePositions();
+			self.scrollContainer();
+			self.updateSyncedElements();
+			self.runTriggers();
+		},
 
-				for (var i = syncedAnimations.length - 1; i >= 0; i--) {
-					var syncedAnimation = syncedAnimations[i];
-					var css = {};
-					var transformString = '';
-					var translateX = 0;
-					var translateY = 0;
-					var $element = $container.find(syncedAnimation.selector);
+		addClickHandler: function() {
+			$navItems.click(function(e){
+				e.preventDefault();
+				var index = $(this).index();
+				self.scrollToSection(index);
+			});
+		},
 
-					// Run through animations array and check for animation types
-					for (var j = syncedAnimation.animations.length - 1; j >= 0; j--) {
-						var animation = syncedAnimation.animations[j];
-						var startPercentage = animation.startPercentage || 0;
-						var endPercentage = animation.endPercentage || 1;
-
-						var newPercentage = (scrollPercentage - startPercentage) * (1 / (endPercentage - startPercentage));
-						if (animation.type == 'rotate') {
-							var deg;
-							animation.start = animation.start || 0;
-							if (scrollPercentage <= startPercentage) {
-								deg = animation.start;
-							} else if (scrollPercentage > startPercentage && scrollPercentage < endPercentage) {
-								deg = ((animation.end - animation.start) * newPercentage) + animation.start;
-							} else {
-								deg = animation.end;
-							}
-							transformString += 'rotate(' + deg + 'deg) ';
-						} else if (animation.type == 'background-color') {
-							var color = self.getIntermediaryColor(animation.start, animation.end, newPercentage);
-							css.backgroundColor = color;
-						} else if ((animation.type == 'right' || animation.type == 'left') && !syncedAnimation.xFunction) {
-							var outDistance = self.getOutDistance($element, animation.type);
-							if (scrollPercentage <= startPercentage) {
-								translateX = '0px';
-							} else if (scrollPercentage > startPercentage && scrollPercentage < endPercentage) {
-								translateX = (outDistance * newPercentage) + 'px';
-							} else {
-								translateX = outDistance + 'px';
-							}
-						} else if ((animation.type == 'down' || animation.type == 'up') && !syncedAnimation.yFunction) {
-							var outDistance = self.getOutDistance($element, animation.type);
-							if (scrollPercentage <= startPercentage) {
-								translateY = '0px';
-							} else if (scrollPercentage > startPercentage && scrollPercentage < endPercentage) {
-								translateY = (outDistance * newPercentage) + 'px';
-							} else {
-								translateY = outDistance + 'px';
-							}
-						}
-					}
-
-					// Check for custom functions on x or y translate position
-					if (syncedAnimation.xFunction || syncedAnimation.yFunction) {
-						var startTranslate = syncedAnimation.startSection ? -((syncedAnimation.startSection - 1) * $sections.width()) : 0;
-
-						if (syncedAnimation.xFunction && currentScrollPos < startTranslate) {
-							translateX = syncedAnimation.xFunction(scrollPercentage);
-						}
-
-						if (syncedAnimation.yFunction && currentScrollPos < startTranslate) {
-							translateY = syncedAnimation.yFunction(scrollPercentage);
-						}
-					}
-
-					transformString += 'translate3d(' + translateX + ',' + translateY + ',0) ';
-
-					css.transform = transformString;
-
-					$container.find(syncedAnimation.selector).css(css);
+		scrollToSection: function(index) {
+			var startPos = currentScrollPos;
+			var endPos = -$container.width() * index;
+			var delta = endPos - startPos;
+			var startTime = Date.now();
+			var duration = 1000;
+			var timer = setInterval(function(){
+				if (true) {};
+				var t = Date.now() - startTime;
+				if (t > duration) {
+					clearInterval(timer);
+				} else {
+					currentScrollPos = self.easings['linear'](t, startPos, delta, duration);
+					self.animate();
 				}
 			});
+		},
+
+		easings: {
+			linear: function(t, b, c, d) {
+				return c*t/d + b;
+			}
+		},
+
+		scrollContainer: function() {
+			$scroller.css({
+				transform: 'translate3d(' + currentScrollPos + 'px,0,0)'
+			});
+		},
+
+		updatePositions: function(e) {
+			var scrollDelta = e ? self.getScrollDelta(e) : 0;
+			currentScrollPos = Math.min(0, Math.max(maxScroll, scrollDelta + currentScrollPos));
+			xPc = currentScrollPos / maxScroll;
+		},
+
+		updateSyncedElements: function() {
+			for (var i = settings.syncedElements.length - 1; i >= 0; i--) {
+				var syncEl = settings.syncedElements[i];
+				var css = {};
+				var transform = '';
+				var x = 0;
+				var y = 0;
+				var $element = $container.find(syncEl.selector);
+
+				// Run through animations array and check for animation types
+				for (var j = syncEl.animations.length - 1; j >= 0; j--) {
+					var a = syncEl.animations[j];
+					var start = a.start || 0;
+					var end = a.end || 100;
+					var startPc = a.startPercentage || 0;
+					var endPc = a.endPercentage || 1;
+					var easing = a.easing || 'linear'
+					var newPc = Math.max(Math.min((xPc - startPc) * (1 / (endPc - startPc)), 1), 0);
+
+
+					if (a.type == 'rotate') {
+						var deg = self.easings[easing](newPc, start, end, 1);
+						transform += 'rotate(' + deg + 'deg) ';
+					} else if (a.type == 'opacity') {
+						var value = self.easings[easing](newPc, start, end, 1);
+						css.opacity = value;
+					} else if (a.type == 'background-color') {
+						var color = self.getIntermediaryColor(start, end, newPc);
+						css.backgroundColor = color;
+					} else if ((a.type == 'right' || a.type == 'left') && !syncEl.xFunction) {
+						var outDistance = self.getOutDistance($element, a.type);
+						x = self.easings[easing](newPc, 0, outDistance, 1) + 'px';
+					} else if ((a.type == 'down' || a.type == 'up') && !syncEl.yFunction) {
+						var outDistance = self.getOutDistance($element, a.type);
+						y = self.easings[easing](newPc, 0, outDistance, 1) + 'px';
+					}
+				}
+
+				// Check for custom functions on x or y translate position
+				if (syncEl.xFunction || syncEl.yFunction) {
+					var startTranslate = syncEl.startSection ? -((syncEl.startSection - 1) * $sections.width()) : 0;
+
+					if (syncEl.xFunction && currentScrollPos < startTranslate) {
+						x = syncEl.xFunction(xPc);
+					}
+
+					if (syncEl.yFunction && currentScrollPos < startTranslate) {
+						y = syncEl.yFunction(xPc);
+					}
+				}
+
+				transform += 'translate3d(' + x + ',' + y + ',0) ';
+				css.transform = transform;
+				$container.find(syncEl.selector).css(css);
+			}
+		},
+
+		runTriggers: function() {
+			var len = settings.syncedTriggers.length;
+			while (len--) {
+				var trigger = settings.syncedTriggers[len];
+				if (trigger.percentage < xPc) {
+					trigger.trigger();
+					settings.syncedTriggers.splice(len, 1);
+				}
+			}
 		},
 
 		getScrollDelta: function(e) {
@@ -139,22 +184,22 @@
 			return scrollDelta * settings.scrollRatio;
 		},
 
-		getOutDistance: function($element, direction) {
-			if ($element.attr('data-out-distance-' + direction)) {
-				return $element.attr('data-out-distance-' + direction);
+		getOutDistance: function($el, dir) {
+			if ($el.attr('data-out-distance-' + dir)) {
+				return $el.attr('data-out-distance-' + dir);
 			} else {
-				var outDistance;
-				if (direction == 'left') {
-					outDistance = -($element.offset().left + $element.outerWidth());
-				} else if (direction == 'right') {
-					outDistance = $container.outerWidth() - $element.offset().left;
-				} else if (direction == 'up') {
-					outDistance = -($element.offset().top + $element.outerHeight());
-				} else if (direction == 'down') {
-					outDistance = $container.outerHeight() - $element.offset().top;
+				var dist;
+				if (dir == 'left') {
+					dist = -($el.offset().left + $el.outerWidth());
+				} else if (dir == 'right') {
+					dist = $container.outerWidth() - $el.offset().left;
+				} else if (dir == 'up') {
+					dist = -($el.offset().top + $el.outerHeight());
+				} else if (dir == 'down') {
+					dist = $container.outerHeight() - $el.offset().top;
 				}
-				$element.attr('data-out-distance-' + direction, outDistance);
-				return outDistance;
+				$el.attr('data-out-distance-' + dir, dist);
+				return dist;
 			}
 		},
 
