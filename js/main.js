@@ -69,5 +69,6 @@ $('#tt').tinyTown({
 			}
 		}
 	],
-	navItemSelector: '.navigation a'
+	navItemSelector: '.navigation a',
+	scrollDuration: 1500
 });

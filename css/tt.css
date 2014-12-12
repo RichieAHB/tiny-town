@@ -1,7 +1,8 @@
 *,:before,:after{box-sizing:border-box}
 html,body{height:100%;width:100%}
 body{padding:3rem 0 3rem}
-.header{background:#ccc;border-bottom:3px solid #234;height:3rem;left:0;line-height:1rem;padding:1rem;position:fixed;top:0;width:100%;z-index:1000}
+.header{background:#fff;border-bottom:3px solid #234;height:3rem;left:0;line-height:1rem;padding:1rem;position:fixed;top:0;width:100%;z-index:1000}
+.navigation a{display:block;float:left;padding:0 1rem}
 .footer{border-top:3px solid #234;bottom:0;height:3rem;left:0;line-height:1rem;padding:1rem;position:fixed;width:100%;z-index:1000}
 .tt{height:100%;overflow:hidden;position:relative;width:100%}
 .tt__static{background-color:#def;height:100%;left:0;position:absolute;top:0;width:100%}

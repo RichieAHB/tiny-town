@@ -75,13 +75,13 @@
 			var endPos = -$container.width() * index;
 			var delta = endPos - startPos;
 			var startTime = Date.now();
-			var duration = 1000;
+			var easing = settings.scrollEasing || 'easeInOutQuad';
 			var timer = setInterval(function(){
 				var t = Date.now() - startTime;
-				if (t > duration) {
+				if (t > settings.scrollDuration) {
 					clearInterval(timer);
 				} else {
-					currentScrollPos = self.easings['linear'](t, startPos, delta, duration);
+					currentScrollPos = self.easings[easing](t, startPos, delta, settings.scrollDuration);
 					self.animate();
 				}
 			});
@@ -90,6 +90,12 @@
 		easings: {
 			linear: function(t, b, c, d) {
 				return c*t/d + b;
+			},
+			easeInOutQuad: function (t, b, c, d) {
+				t /= d/2;
+				if (t < 1) return c/2*t*t + b;
+				t--;
+				return -c/2 * (t*(t-2) - 1) + b;
 			}
 		},
 

@@ -15,7 +15,7 @@ body {
 }
 
 .header {
-	background: #ccc;
+	background: #fff;
 	border-bottom: 3px solid #234;
 	height: $header_height;
 	left: 0;
@@ -25,6 +25,14 @@ body {
 	top: 0;
 	width: 100%;
 	z-index: 1000;
+}
+
+.navigation {
+	a {
+		display: block;
+		float: left;
+		padding: 0 1rem;
+	}
 }
 
 .footer {
