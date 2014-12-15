@@ -1,9 +1,10 @@
 ;(function ( $, window, document, undefined ) {
 	var pluginName = "tinyTown";
 	var defaults = {
-		scroller: '.tt__scroller',
+		scroller: '#tt__scroller',
 		scrollRatio: 0.25,
-		sections: '.section',
+		scrollerSections: '.section',
+		syncedScrollers: '.sub-scroller',
 		syncedElements: false
 	};
 
@@ -12,7 +13,7 @@
 	var $w = $(window);
 	var $container;
 	var $scroller;
-	var $sections;
+	var $scrollerSections;
 	var maxScroll;
 	var currentScrollPos = 0;
 	var xPc = 0;
@@ -25,26 +26,26 @@
 		settings = $.extend( {}, defaults, options);
 
 		$scroller = $container.find(settings.scroller);
-		$sections = $scroller.find(settings.sections);
+		$scrollerSections = $scroller.find(settings.scrollerSections);
 		$syncedScrollers = $container.find(settings.syncedScrollers);
 		$navItems = $(settings.navItemSelector);
 
-		this._defaults = defaults;
-		this._name = pluginName;
+		self._defaults = defaults;
+		self._name = pluginName;
 
-		this.init();
+		self.init();
 	}
 
 	Plugin.prototype = {
 
 		init: function() {
-			this.setMaxScroll();
-			this.addScrollerHandler();
-			this.addClickHandler();
+			self.setMaxScroll();
+			self.addScrollerHandler();
+			self.addClickHandler();
 		},
 
 		setMaxScroll: function() {
-			maxScroll = -($sections.length - 1) * $container.width();
+			maxScroll = -($scrollerSections.length - 1) * $container.width();
 		},
 
 		addScrollerHandler: function(e) {
@@ -59,7 +60,7 @@
 
 		animate: function() {
 			self.updatePositions();
-			self.scrollContainer();
+			self.translateScrollers();
 			self.updateSyncedElements();
 			self.runTriggers();
 		},
@@ -101,9 +102,19 @@
 			}
 		},
 
-		scrollContainer: function() {
+		translateScrollers: function() {
 			$scroller.css({
 				transform: 'translate3d(' + currentScrollPos + 'px,0,0)'
+			});
+
+			$syncedScrollers.each(function(){
+				$el = $(this);
+				var ratio = ($el.width() - $container.width()) / -maxScroll;
+				console.log(ratio);
+				var translateAmount = currentScrollPos * ratio;
+				$el.css({
+					transform: 'translate3d(' + translateAmount + 'px,0,0)'
+				});
 			});
 		},
 
@@ -144,7 +155,7 @@
 
 				// Check for custom functions on x or y translate position
 				if (syncEl.xFunction || syncEl.yFunction) {
-					var startTranslate = syncEl.startSection ? -((syncEl.startSection - 1) * $sections.width()) : 0;
+					var startTranslate = syncEl.startSection ? -((syncEl.startSection - 1) * $scrollerSections.width()) : 0;
 
 					if (syncEl.xFunction && currentScrollPos < startTranslate) {
 						x = syncEl.xFunction(xPc);
@@ -163,28 +174,28 @@
 
 		getAnimationValue: function($el, a) {
 			var k = a.keyframes;
-			var closestKs = this.getClosestValues(k, xPc);
+			var closestKs = self.getClosestValues(k, xPc);
 			var k1 = closestKs[0] || closestKs[1];
 			var k2 = closestKs[1] || closestKs[0];
 			var duration = k2 - k1 || 1; // Don't return NaN / Infinity
 
 			var easing = k[k1].easing || 'linear';
-			var startValue = k[k1].value || k[k1] || 0;
+			var startValue = typeof k[k1].value !== 'undefined' ? k[k1].value : k[k1];
 			if (startValue === 'out') {
-				startValue = this.getOutDistance($el, a.type);
+				startValue = self.getOutDistance($el, a.type);
 			}
 
-			var endValue = k[k2].value || k[k2] || 100;
+			var endValue = typeof k[k2].value !== 'undefined' ? k[k2].value : k[k2];
 			if (endValue === 'out') {
-				endValue = this.getOutDistance($el, a.type);
+				endValue = self.getOutDistance($el, a.type);
 			}
 
 			var newPc = Math.min(Math.max(xPc - k1, 0), 1);
 			if (['color', 'background-color'].indexOf(a.type) >= 0) {
-				return this.getIntermediaryColor(newPc, startValue, endValue, duration);
+				return self.getIntermediaryColor(newPc, startValue, endValue, duration);
 			} else {
 				endValue = endValue - startValue;
-				return this.easings[easing](newPc, startValue, endValue, duration);
+				return self.easings[easing](newPc, startValue, endValue, duration);
 			}
 		},
 
@@ -239,13 +250,15 @@
 			}
 		},
 
+		// Color functions
+
 		componentToHex: function(c) {
 			var hex = c.toString(16);
 			return hex.length == 1 ? "0" + hex : hex;
 		},
 
 		rgbToHex: function(r, g, b) {
-			return "#" + this.componentToHex(r) + this.componentToHex(g) + this.componentToHex(b);
+			return "#" + self.componentToHex(r) + self.componentToHex(g) + self.componentToHex(b);
 		},
 
 		hexToRgb: function(hex) {
@@ -258,12 +271,12 @@
 		},
 
 		getIntermediaryColor: function(percentage, color1, color2, duration) {
-			c1 = this.hexToRgb(color1);
-			c2 = this.hexToRgb(color2);
+			c1 = self.hexToRgb(color1);
+			c2 = self.hexToRgb(color2);
 			r = Math.round(c1.r + (c2.r-c1.r) * (percentage / duration));
 			g = Math.round(c1.g + (c2.g-c1.g) * (percentage / duration));
 			b = Math.round(c1.b + (c2.b-c1.b) * (percentage / duration));
-			return this.rgbToHex(r, g, b);
+			return self.rgbToHex(r, g, b);
 		}
 	};
 

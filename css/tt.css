@@ -7,9 +7,12 @@ body{padding:3rem 0 3rem}
 .tt{height:100%;overflow:hidden;position:relative;width:100%}
 .tt__static{background-color:#def;height:100%;left:0;position:absolute;top:0;width:100%}
 .tt__scroller{height:100%;font-size:0;left:0;position:absolute;top:0;width:100%;white-space:nowrap}
+.tt__scroller--town{width:400%}
+.tt__scroller--hills{width:120%}
 .section{display:inline-block;font-size:1rem;height:100%;position:relative;width:100%}
 .building{background-color:#562826;bottom:0;color:#fff;height:150px;left:25%;padding:1rem;position:absolute;text-align:center;text-transform:uppercase;width:200px;z-index:50}
-.building:after{border-style:solid;border-width:0 100px 100px 100px;border-color:transparent transparent #562926 transparent;content:'';display:block;height:0;left:0;position:absolute;bottom:100%;width:0}
+.building .roof{border-style:solid;border-width:0 100px 100px 100px;border-color:transparent transparent #562926 transparent;content:'';display:block;height:0;left:0;position:absolute;bottom:100%;width:0}
+.hill{border-style:solid;border-width:0 100px 50px 100px;border-color:transparent transparent #2F793B transparent;content:'';display:block;height:0;left:0;position:absolute;bottom:0;width:0}
 .car{background-color:#fff;border:3px solid #234;border-top-left-radius:.5rem;border-top-right-radius:2rem;bottom:.75rem;height:2rem;position:absolute;left:3rem;width:4rem;z-index:100}
 .car:before{border:3px solid #234;border-radius:50%;content:'';height:1rem;left:0;position:absolute;top:100%;width:1rem}
 .car:after{border:3px solid #234;border-radius:50%;content:'';height:1rem;position:absolute;right:0;top:100%;width:1rem}

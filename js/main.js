@@ -9,10 +9,42 @@ function generateStars(count) {
 			width: size + 'px',
 		});
 	}
-	
+}
+
+function generateBuildings(count) {
+	while (count--) {
+		var size = (Math.random() * 100) + 150;
+		var red = ((Math.round(Math.random()) * 2) + 3) + '' + (Math.round(Math.random()) * 9);
+		var $roof = $('<div class="roof">').css({
+			'border-color': 'transparent transparent #' + red + '1204 transparent',
+			'border-width': '0 ' + (size / 2) + 'px ' + (size / 2) + 'px ' + (size / 2) + 'px'
+		});
+		$('<div class="building">').appendTo($('.tt__scroller--town')).css({
+			backgroundColor: '#' + red + '1204',
+			bottom: 0,
+			left: Math.random() * 100 + '%',
+			height: size * Math.random() + 'px',
+			width: size + 'px'
+		}).append($roof);
+	}
+}
+
+function generateHills(count) {
+	while (count--) {
+		var size = (Math.random() * ($(window).height() / 2)) + ($(window).height() / 4);
+		$('<div class="hill">').appendTo($('.tt__scroller--hills')).css({
+			'border-width': '0 ' + size + 'px ' + (size / 2) + 'px ' + size + 'px',
+			left: ((Math.random() * 150) - 25) + '%',
+			height: size * Math.random() + 'px',
+			opacity: Math.random() * 0.5 + 0.5,
+			width: size + 'px'
+		});
+	}
 }
 
 generateStars(100);
+generateBuildings(30);
+generateHills(30);
 
 $('#tt').tinyTown({
 	syncedElements: [
@@ -73,5 +105,6 @@ $('#tt').tinyTown({
 		}
 	],
 	navItemSelector: '.navigation a',
-	scrollDuration: 1500
+	scrollDuration: 1500,
+	syncedScrollers: '.tt__scroller--sub'
 });
