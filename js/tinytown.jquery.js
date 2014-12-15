@@ -123,29 +123,20 @@
 				// Run through animations array and check for animation types
 				for (var j = syncEl.animations.length - 1; j >= 0; j--) {
 					var a = syncEl.animations[j];
-					var start = a.start || 0;
-					var end = a.end || 100;
-					var startPc = a.startPercentage || 0;
-					var endPc = a.endPercentage || 1;
-					var easing = a.easing || 'linear'
-					var newPc = Math.max(Math.min((xPc - startPc) * (1 / (endPc - startPc)), 1), 0);
 
 
 					if (a.type == 'rotate') {
-						var deg = self.easings[easing](newPc, start, end, 1);
+						var deg = self.getAnimationValue($element, a);
 						transform += 'rotate(' + deg + 'deg) ';
 					} else if (a.type == 'opacity') {
-						var value = self.easings[easing](newPc, start, end, 1);
+						var value = self.getAnimationValue($element, a);
 						css.opacity = value;
 					} else if (a.type == 'background-color') {
-						var color = self.getIntermediaryColor(start, end, newPc);
-						css.backgroundColor = color;
+						css.backgroundColor = self.getAnimationValue($element, a);
 					} else if ((a.type == 'right' || a.type == 'left') && !syncEl.xFunction) {
-						var outDistance = self.getOutDistance($element, a.type);
-						x = self.easings[easing](newPc, 0, outDistance, 1) + 'px';
+						x = self.getAnimationValue($element, a) + 'px';
 					} else if ((a.type == 'down' || a.type == 'up') && !syncEl.yFunction) {
-						var outDistance = self.getOutDistance($element, a.type);
-						y = self.easings[easing](newPc, 0, outDistance, 1) + 'px';
+						y = self.getAnimationValue($element, a) + 'px';
 					}
 				}
 
@@ -168,13 +159,51 @@
 			}
 		},
 
+		getAnimationValue: function($el, a) {
+			var k = a.keyframes;
+			var closestKs = this.getClosestValues(k, xPc);
+			var k1 = closestKs[0] || closestKs[1];
+			var k2 = closestKs[1] || closestKs[0];
+			var duration = k2 - k1 || 1; // Don't return NaN / Infinity
+
+			var easing = k[k1].easing || 'linear';
+			var startValue = k[k1].value || k[k1] || 0;
+			if (startValue === 'out') {
+				startValue = this.getOutDistance($el, a.type);
+			}
+
+			var endValue = k[k2].value || k[k2] || 100;
+			if (endValue === 'out') {
+				endValue = this.getOutDistance($el, a.type);
+			}
+
+			var newPc = Math.min(Math.max(xPc - k1, 0), 1);
+			if (['color', 'background-color'].indexOf(a.type) >= 0) {
+				return this.getIntermediaryColor(newPc, startValue, endValue, duration);
+			} else {
+				endValue = endValue - startValue;
+				return this.easings[easing](newPc, startValue, endValue, duration);
+			}
+		},
+
+		getClosestValues: function(a, x) {
+		    var lo, hi;
+		    for (key in a) {
+		        if (key <= x && (lo === undefined || lo < key)) lo = key;
+		        if (key >= x && (hi === undefined || hi > key)) hi = key;
+		    }
+		    return [lo, hi];
+		},
+
 		runTriggers: function() {
-			var len = settings.syncedTriggers.length;
-			while (len--) {
-				var trigger = settings.syncedTriggers[len];
-				if (trigger.percentage < xPc) {
-					trigger.trigger();
-					settings.syncedTriggers.splice(len, 1);
+			if (settings.syncedTriggers) {
+				var len = settings.syncedTriggers.length;
+				while (len--) {
+					var trigger = settings.syncedTriggers[len];
+					if (trigger.percentage < xPc) {
+						trigger.trigger();
+						settings.syncedTriggers.splice(len, 1);
+					}
 				}
 			}
 		},
@@ -191,7 +220,7 @@
 
 		getOutDistance: function($el, dir) {
 			if ($el.attr('data-out-distance-' + dir)) {
-				return $el.attr('data-out-distance-' + dir);
+				return parseInt($el.attr('data-out-distance-' + dir), 10);
 			} else {
 				var dist;
 				if (dir == 'left') {
@@ -226,12 +255,12 @@
 			} : null;
 		},
 
-		getIntermediaryColor: function(color1, color2, percentage) {
+		getIntermediaryColor: function(percentage, color1, color2, duration) {
 			c1 = this.hexToRgb(color1);
 			c2 = this.hexToRgb(color2);
-			r = Math.round(c1.r + (c2.r-c1.r) * percentage);
-			g = Math.round(c1.g + (c2.g-c1.g) * percentage);
-			b = Math.round(c1.b + (c2.b-c1.b) * percentage);
+			r = Math.round(c1.r + (c2.r-c1.r) * (percentage / duration));
+			g = Math.round(c1.g + (c2.g-c1.g) * (percentage / duration));
+			b = Math.round(c1.b + (c2.b-c1.b) * (percentage / duration));
 			return this.rgbToHex(r, g, b);
 		}
 	};

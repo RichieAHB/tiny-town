@@ -20,53 +20,56 @@ $('#tt').tinyTown({
 			selector: '.celestial-bodies',
 			animations: [{
 				type: 'rotate',
-				end: -180
+				keyframes: {
+					0: 0,
+					1: -180
+				}
 			}]
 		},{
 			selector: '.tt__static',
 			animations: [{
 				type: 'background-color',
-				start: '#ddeeff',
-				end: '#112233'
+				keyframes: {
+					0: '#ddeeff',
+					1: '#112233'
+				}
 			}]
 		},{
 			selector: '.moon',
 			animations: [{
 				type: 'background-color',
-				start: '#ddeeff',
-				end: '#112233'
+				keyframes: {
+					0: '#ddeeff',
+					1: '#112233'
+				}
 			}]
 		},{
 			selector: '.car',
 			animations: [{
 				type: 'right',
-				end: 'out'
+				keyframes: {
+					0: 0,
+					1: 'out'
+				}
 			}]
 		},{
 			selector: '.balloon',
 			animations: [{
 				type: 'up',
-				end: 'out',
-				startPercentage: 0.4,
-				endPercentage: 0.6
+				keyframes: {
+					0.4: 0,
+					0.6: 'out'
+				}
 			}]
 		},{
 			selector: '.stars',
 			animations: [{
 				type: 'opacity',
-				start: 0,
-				end: 1,
-				startPercentage: 0.6,
-				endPercentage: 1
+				keyframes: {
+					0.6: 0,
+					1: 1
+				}
 			}]
-		}
-	],
-	syncedTriggers: [
-		{
-			percentage: 0.5,
-			trigger: function() {
-				$('.car').addClass('rotate');
-			}
 		}
 	],
 	navItemSelector: '.navigation a',
