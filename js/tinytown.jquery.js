@@ -50,8 +50,10 @@
 		addScrollerHandler: function(e) {
 			$container.on('DOMMouseScroll mousewheel touchmove', function(e){
 				e.preventDefault();
-				self.updatePositions(e);
-				self.animate();
+				requestAnimationFrame(function(){
+					self.updatePositions(e);
+					self.animate();
+				});
 			});
 		},
 
