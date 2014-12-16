@@ -36,6 +36,6 @@ body{padding:3rem 0 3rem}
 .video-container{left:50%;position:absolute;bottom:3rem}
 .video-container:before{background-color:#333;top:100%;content:'';height:4rem;left:3rem;position:absolute;width:.25rem}
 .video-container:after{background-color:#333;top:100%;content:'';height:4rem;position:absolute;right:3rem;width:.25rem}
-.balloon{border:3px solid #234;background-color:#fff;bottom:37px;border-radius:50%;height:100px;left:50%;position:absolute;width:100px}
+.balloon{border:3px solid #234;background-color:#F054FE;bottom:37px;border-radius:50%;height:100px;left:50%;position:absolute;width:100px}
 .balloon:before{background-color:transparent;border-left:3px solid #234;border-right:3px solid #234;content:'';height:20px;left:50%;margin-left:-10px;position:absolute;top:100%;width:20px}
 .balloon:after{background-color:#234;content:'';height:20px;left:50%;margin-left:-10px;margin-top:20px;position:absolute;top:100%;width:20px}

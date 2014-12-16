@@ -1,11 +1,11 @@
 function generateStars(count) {
 	while (count--) {
-		var size = Math.random() * 10;
+		var size = Math.round(Math.random() * 10);
 		$('<div class="star">').appendTo($('.stars')).css({
-			left: Math.random() * 100 + '%',
+			left: Math.round(Math.random() * 100) + '%',
 			opacity: Math.random(),
 			height: size + 'px',
-			top: Math.random() * 100 + '%',
+			top: Math.round(Math.random() * 100) + '%',
 			width: size + 'px',
 		});
 	}
@@ -13,7 +13,7 @@ function generateStars(count) {
 
 function generateBuildings(count) {
 	while (count--) {
-		var size = (Math.random() * 100) + 150;
+		var size = Math.round(Math.random() * 100) + 150;
 		var red = ((Math.round(Math.random()) * 2) + 3) + '' + (Math.round(Math.random()) * 9);
 		var $roof = $('<div class="roof">').css({
 			'border-color': 'transparent transparent #' + red + '1204 transparent',
@@ -22,8 +22,8 @@ function generateBuildings(count) {
 		$('<div class="building">').appendTo($('.tt__scroller--town')).css({
 			backgroundColor: '#' + red + '1204',
 			bottom: 0,
-			left: Math.random() * 100 + '%',
-			height: size * Math.random() + 'px',
+			left: Math.round(Math.random() * 100) + '%',
+			height: Math.round(size * Math.random()) + 'px',
 			width: size + 'px'
 		}).append($roof);
 	}
@@ -33,13 +33,13 @@ function generateClouds(count) {
 	while (count--) {
 		var size = (Math.random() * 100) + 150;
 		$('<div class="cloud">').appendTo($('.tt__scroller--clouds-front')).css({
-			bottom: ((Math.random() * 50) + 50) + '%',
-			right: ((Math.random() * 50) + 50) + '%',
+			bottom: Math.round((Math.random() * 50) + 50) + '%',
+			right: Math.round((Math.random() * 50) + 50) + '%',
 			transform: 'scale(' + ((Math.random() * 0.5) + 0.5) + ')'
 		});
 		$('<div class="cloud">').appendTo($('.tt__scroller--clouds-back')).css({
-			bottom: ((Math.random() * 50) + 50) + '%',
-			right: ((Math.random() * 50) + 50) + '%',
+			bottom: Math.round((Math.random() * 50) + 50) + '%',
+			right: Math.round((Math.random() * 50) + 50) + '%',
 			transform: 'scale(' + ((Math.random() * 0.25) + 0.25) + ')'
 		});
 	}
@@ -47,11 +47,11 @@ function generateClouds(count) {
 
 function generateHills(count) {
 	while (count--) {
-		var size = (Math.random() * ($(window).height() / 2)) + ($(window).height() / 4);
+		var size = Math.round((Math.random() * ($(window).height() / 2)) + ($(window).height() / 4));
 		$('<div class="hill">').appendTo($('.tt__scroller--hills')).css({
 			'border-width': '0 ' + size + 'px ' + (size / 2) + 'px ' + size + 'px',
-			left: ((Math.random() * 150) - 25) + '%',
-			height: size * Math.random() + 'px',
+			left: Math.round((Math.random() * 200) - 50) + '%',
+			height: Math.round(size * Math.random()) + 'px',
 			opacity: Math.random() * 0.5 + 0.5,
 			width: size + 'px'
 		});

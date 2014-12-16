@@ -17,7 +17,7 @@
 	var maxScroll;
 	var currentScrollPos = 0;
 	var xPc = 0;
-	var lastScreenY = 0;
+	var lastPageY = 0;
 
 	function Plugin( element, options ) {
 		self = this;
@@ -229,8 +229,8 @@
 
 		getScrollDelta: function(e) {
 			if (e.originalEvent.touches) {
-				scrollDelta = e.originalEvent.touches[0].screenY - lastScreenY;
-        		lastScreenY = e.originalEvent.touches[0].screenY;
+				scrollDelta = e.originalEvent.touches[0].pageY - lastPageY;
+        		lastPageY = e.originalEvent.touches[0].pageY;
         		return scrollDelta;
 			} else {
 				scrollDelta = parseInt(e.originalEvent.wheelDelta || -e.originalEvent.detail * 10);
