@@ -29,6 +29,22 @@ function generateBuildings(count) {
 	}
 }
 
+function generateClouds(count) {
+	while (count--) {
+		var size = (Math.random() * 100) + 150;
+		$('<div class="cloud">').appendTo($('.tt__scroller--clouds-front')).css({
+			bottom: ((Math.random() * 50) + 50) + '%',
+			right: ((Math.random() * 50) + 50) + '%',
+			transform: 'scale(' + ((Math.random() * 0.5) + 0.5) + ')'
+		});
+		$('<div class="cloud">').appendTo($('.tt__scroller--clouds-back')).css({
+			bottom: ((Math.random() * 50) + 50) + '%',
+			right: ((Math.random() * 50) + 50) + '%',
+			transform: 'scale(' + ((Math.random() * 0.25) + 0.25) + ')'
+		});
+	}
+}
+
 function generateHills(count) {
 	while (count--) {
 		var size = (Math.random() * ($(window).height() / 2)) + ($(window).height() / 4);
@@ -45,6 +61,7 @@ function generateHills(count) {
 generateStars(100);
 generateBuildings(30);
 generateHills(30);
+generateClouds(7);
 
 $('#tt').tinyTown({
 	syncedElements: [
@@ -58,12 +75,22 @@ $('#tt').tinyTown({
 				}
 			}]
 		},{
-			selector: '.tt__static',
+			selector: '.sky',
 			animations: [{
 				type: 'background-color',
 				keyframes: {
 					0: '#ddeeff',
 					1: '#112233'
+				}
+			}]
+		},{
+			selector: '.halo',
+			animations: [{
+				type: 'opacity',
+				keyframes: {
+					0.2: 0,
+					0.5: 1,
+					0.8: 0
 				}
 			}]
 		},{

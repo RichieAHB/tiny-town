@@ -55,7 +55,6 @@ body {
 }
 
 .tt__static {
-	background-color: #ddeeff;
 	height: 100%;
 	left: 0;
 	position: absolute;
@@ -75,6 +74,14 @@ body {
 
 .tt__scroller--town {
 	width: 400%;
+}
+
+.tt__scroller--clouds-front {
+	width: 300%;
+}
+
+.tt__scroller--clouds-back {
+	width: 200%;
 }
 
 .tt__scroller--hills {
@@ -167,6 +174,24 @@ body {
 	width: 1rem;
 }
 
+.sky {
+	background-color: #ddeeff;
+}
+
+.halo {
+	background: -moz-radial-gradient(center, ellipse cover,  rgba(242,177,48,1) 0%, rgba(237,218,128,0.2) 60%, rgba(237,218,128,0) 80%); /* FF3.6+ */
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(242,177,48,1)), color-stop(60%,rgba(237,218,128,0.2)), color-stop(80%,rgba(237,218,128,0))); /* Chrome,Safari4+ */
+	background: -webkit-radial-gradient(center, ellipse cover,  rgba(242,177,48,1) 0%,rgba(237,218,128,0.2) 60%,rgba(237,218,128,0) 80%); /* Chrome10+,Safari5.1+ */
+	background: -o-radial-gradient(center, ellipse cover,  rgba(242,177,48,1) 0%,rgba(237,218,128,0.2) 60%,rgba(237,218,128,0) 80%); /* Opera 12+ */
+	background: -ms-radial-gradient(center, ellipse cover,  rgba(242,177,48,1) 0%,rgba(237,218,128,0.2) 60%,rgba(237,218,128,0) 80%); /* IE10+ */
+	background: radial-gradient(ellipse at center,  rgba(242,177,48,1) 0%,rgba(237,218,128,0.2) 60%,rgba(237,218,128,0) 80%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2b130', endColorstr='#00edda80',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+	height: 200%;
+	left: -50%;
+	opacity: 0;
+	width: 200%;
+}
+
 .stars {
 	opacity: 0;
 }
@@ -195,6 +220,40 @@ body {
 	margin-left: -50px;
 	position: absolute;
 	width: 100px;
+}
+
+.cloud {
+	width: 350px; height: 120px;
+	background: #fff;
+	border-radius: 100px;
+	position: absolute;
+	margin: 120px auto 20px;
+	z-index: 0;
+}
+
+.cloud:after, .cloud:before {
+	content: '';
+	position: absolute;
+	background: #fff;
+	z-index: -1
+}
+
+.cloud:after {
+	width: 100px; height: 100px;
+	top: -50px; left: 50px;
+	border-radius: 100px;
+}
+
+.cloud:before {
+	width: 180px; height: 180px;
+	top: -90px; right: 50px;
+	border-radius: 200px;
+}
+
+.tt__scroller--clouds-back {
+	.cloud {
+		opacity: 0.9;
+	}
 }
 
 .sun {
