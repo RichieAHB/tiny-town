@@ -17,7 +17,7 @@
 	var maxScroll;
 	var currentScrollPos = 0;
 	var xPc = 0;
-	var lastPageY;
+	var lastScreenY = 0;
 
 	function Plugin( element, options ) {
 		self = this;
@@ -42,6 +42,13 @@
 			self.setMaxScroll();
 			self.addScrollerHandler();
 			self.addClickHandler();
+			self.addTouchHandler();
+		},
+
+		addTouchHandler: function() {
+			$container.on('touchstart', function(e){
+				lastScreenY = e.originalEvent.touches[0].screenY;
+			});
 		},
 
 		setMaxScroll: function() {
@@ -110,7 +117,6 @@
 			$syncedScrollers.each(function(){
 				$el = $(this);
 				var ratio = ($el.width() - $container.width()) / -maxScroll;
-				console.log(ratio);
 				var translateAmount = currentScrollPos * ratio;
 				$el.css({
 					transform: 'translate3d(' + translateAmount + 'px,0,0)'
@@ -222,13 +228,14 @@
 		},
 
 		getScrollDelta: function(e) {
-			if (e.touches) {
-				scrollDelta = e.touches[0].pageY - lastPageY;
-        		lastPageY = e.touches[0].page;
+			if (e.originalEvent.touches) {
+				scrollDelta = e.originalEvent.touches[0].screenY - lastScreenY;
+        		lastScreenY = e.originalEvent.touches[0].screenY;
+        		return scrollDelta;
 			} else {
 				scrollDelta = parseInt(e.originalEvent.wheelDelta || -e.originalEvent.detail * 10);
+				return scrollDelta * settings.scrollRatio;
 			}
-			return scrollDelta * settings.scrollRatio;
 		},
 
 		getOutDistance: function($el, dir) {
