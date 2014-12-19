@@ -1,5 +1,14 @@
 ;(function ( $, window, document, undefined ) {
+	/**
+	 * The plugin name
+	 * @type {string}
+	 */
 	var pluginName = "tinyTown";
+
+	/**
+	 * The default values for the plugin
+	 * @type {object}
+	 */
 	var defaults = {
 		scroller: '#tt__scroller',
 		scrollRatio: 0.25,
@@ -8,15 +17,58 @@
 		syncedElements: false
 	};
 
+	/**
+	 * The main settings for the plugin
+	 * @type {object}
+	 */
 	var settings;
+
+	/**
+	 * A reference to the plugin for use inside event handlers
+	 * @type {self}
+	 */
 	var self;
-	var $w = $(window);
+
+	/**
+	 * The main container for the plugin
+	 * @type {jQuery object}
+	 */
 	var $container;
+
+	/**
+	 * The main scroller for the plugin
+	 * @type {jQuery object}
+	 */
 	var $scroller;
+
+	/**
+	 * A list of the sections in the main scroller
+	 * @type {jQuery object}
+	 */
 	var $scrollerSections;
+
+	/**
+	 * The maximum amount in pixels that the main scroller can translate
+	 * @type {jQuery integer}
+	 */
 	var maxScroll;
+
+	/**
+	 * The current scroll position in pixels that the main scroller has translated
+	 * @type {jQuery integer}
+	 */
 	var currentScrollPos = 0;
+
+	/**
+	 * The current scroll position as a percentage of the maxScroll
+	 * @type {jQuery integer}
+	 */
 	var xPc = 0;
+
+	/**
+	 * The last Y position that a touch event was registed, for touch deltas
+	 * @type {integer}
+	 */
 	var lastPageY = 0;
 
 	/**
