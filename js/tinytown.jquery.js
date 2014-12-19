@@ -19,6 +19,10 @@
 	var xPc = 0;
 	var lastPageY = 0;
 
+	/**
+	 * The Tiny Town plugin
+	 * @constructor
+	 */
 	function Plugin( element, options ) {
 		self = this;
 
@@ -38,6 +42,9 @@
 
 	Plugin.prototype = {
 
+		/**
+		 * The main function to run when the plugin is constructed
+		 */
 		init: function() {
 			self.setMaxScroll();
 			self.addScrollerHandler();
@@ -45,16 +52,25 @@
 			self.addTouchHandler();
 		},
 
+		/**
+		 * Sets the global maxscroll variable that for the main scroller
+		 */
+		setMaxScroll: function() {
+			maxScroll = -($scrollerSections.length - 1) * $container.width();
+		},
+
+		/**
+		 * Adds the touche handler
+		 */
 		addTouchHandler: function() {
 			$container.on('touchstart', function(e){
 				lastScreenY = e.originalEvent.touches[0].screenY;
 			});
 		},
 
-		setMaxScroll: function() {
-			maxScroll = -($scrollerSections.length - 1) * $container.width();
-		},
-
+		/**
+		 * Adds the mousewheel / touch handler
+		 */
 		addScrollerHandler: function(e) {
 			$container.on('DOMMouseScroll mousewheel touchmove', function(e){
 				e.preventDefault();
@@ -65,6 +81,9 @@
 			});
 		},
 
+		/**
+		 * The wrapper function that runs all of the animations based on the relevant global variables 
+		 */
 		animate: function() {
 			self.updatePositions();
 			self.translateScrollers();
@@ -72,6 +91,9 @@
 			self.runTriggers();
 		},
 
+		/**
+		 * Add the click handler 
+		 */
 		addClickHandler: function() {
 			$navItems.click(function(e){
 				e.preventDefault();
@@ -80,6 +102,10 @@
 			});
 		},
 
+		/**
+		 * Animates to the specified section
+		 * @param {integer} index - the index of the section to scroll to
+		 */
 		scrollToSection: function(index) {
 			var startPos = currentScrollPos;
 			var endPos = -$container.width() * index;
@@ -109,6 +135,9 @@
 			}
 		},
 
+		/**
+		 * Translates both the main scroller and any synced scrollers
+		 */
 		translateScrollers: function() {
 			$scroller.css({
 				transform: 'translate3d(' + currentScrollPos + 'px,0,0)'
@@ -124,12 +153,19 @@
 			});
 		},
 
+		/**
+		 * Updates the global position variables
+		 * @param {event} - the event that triggers a translate
+		 */
 		updatePositions: function(e) {
 			var scrollDelta = e ? self.getScrollDelta(e) : 0;
 			currentScrollPos = Math.min(0, Math.max(maxScroll, scrollDelta + currentScrollPos));
 			xPc = currentScrollPos / maxScroll;
 		},
 
+		/**
+		 * Updates all the synced elements and their respective CSS properties based on the current scroll position
+		 */
 		updateSyncedElements: function() {
 			for (var i = settings.syncedElements.length - 1; i >= 0; i--) {
 				var syncEl = settings.syncedElements[i];
@@ -178,6 +214,11 @@
 			}
 		},
 
+		/**
+		 * @param {object} $el - jQuery
+		 * @param {object} a - animation object
+		 * @returns {number|string} a number representing scale/translate factors or a string representing a colour
+		 */
 		getAnimationValue: function($el, a) {
 			var k = a.keyframes;
 			var closestKs = self.getClosestValues(k, xPc);
@@ -205,6 +246,12 @@
 			}
 		},
 
+		/**
+		 * Gets the closest numeric keys in an array to the specified number
+		 * @param {array} a - the array with numeric keys to search
+		 * @param {number} x - the number to compare the keys to
+		 * @returns {array} two numeric array keys that are just below and just above the number repecitvely
+		 */
 		getClosestValues: function(a, x) {
 		    var lo, hi;
 		    for (key in a) {
@@ -214,6 +261,9 @@
 		    return [lo, hi];
 		},
 
+		/**
+		 * Loops through all triggers, runs them if appropropriate before removing them from the array of triggers
+		 */
 		runTriggers: function() {
 			if (settings.syncedTriggers) {
 				var len = settings.syncedTriggers.length;
@@ -227,6 +277,10 @@
 			}
 		},
 
+		/**
+		 * @param {event} [e] - the event on the container
+		 * @return {integer} - the delta in pixels to move the container
+		 */
 		getScrollDelta: function(e) {
 			if (e.originalEvent.touches) {
 				scrollDelta = e.originalEvent.touches[0].pageY - lastPageY;
@@ -238,6 +292,12 @@
 			}
 		},
 
+		/**
+		 * Get the distance required to move an element out of the bounds of the container in a specific direction
+		 * @param {jQuery object} $el - the element to test
+		 * @param {string} dir - the direction to measure
+		 * @returns {integer} the distance in pixels
+		 */
 		getOutDistance: function($el, dir) {
 			if ($el.attr('data-out-distance-' + dir)) {
 				return parseInt($el.attr('data-out-distance-' + dir), 10);
@@ -257,17 +317,32 @@
 			}
 		},
 
-		// Color functions
-
+		/**
+		 * Takes rgb component and converts it to hexadecimal equivalent
+		 * @param {integer} c - rgb component
+		 * @retunrs {string} the hexadecimal component
+		 */
 		componentToHex: function(c) {
 			var hex = c.toString(16);
 			return hex.length == 1 ? "0" + hex : hex;
 		},
 
+		/**
+		 * Converts an rgb color into an hexadecimal color
+		 * @param {integer} r - the red component
+		 * @param {integer} g - the green component
+		 * @param {integer} b - the blue component
+		 * @returns {string} - the hexadecimal string
+		 */
 		rgbToHex: function(r, g, b) {
 			return "#" + self.componentToHex(r) + self.componentToHex(g) + self.componentToHex(b);
 		},
 
+		/** 
+		 * Converts an hexadecimal color into and rgb color
+		 * @param {string} hex - an hexadecimal color
+		 * @returns {object} - and object containing the rgb components
+		 */
 		hexToRgb: function(hex) {
 			var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 			return result ? {
@@ -277,16 +352,27 @@
 			} : null;
 		},
 
-		getIntermediaryColor: function(percentage, color1, color2, duration) {
+		/**
+		 * Returns a linear interpolation of two colours given a position along a duration
+		 * @param {number} position - the position along the duration
+		 * @param {string} color1 - the inital hexadecimal color
+		 * @param {string} color1 - the final hexadecimal color
+		 * @param {number} duration - the max position value
+		 */
+		getIntermediaryColor: function(position, color1, color2, duration) {
 			c1 = self.hexToRgb(color1);
 			c2 = self.hexToRgb(color2);
-			r = Math.round(c1.r + (c2.r-c1.r) * (percentage / duration));
-			g = Math.round(c1.g + (c2.g-c1.g) * (percentage / duration));
-			b = Math.round(c1.b + (c2.b-c1.b) * (percentage / duration));
+			r = Math.round(c1.r + (c2.r-c1.r) * (position / duration));
+			g = Math.round(c1.g + (c2.g-c1.g) * (position / duration));
+			b = Math.round(c1.b + (c2.b-c1.b) * (position / duration));
 			return self.rgbToHex(r, g, b);
 		}
 	};
 
+	/*
+	 * Adds the plugin to the jQuery namespace
+	 * @function
+	 */
 	$.fn[pluginName] = function ( options ) {
 		return this.each(function () {
 			if (!$.data(this, "plugin_" + pluginName)) {
