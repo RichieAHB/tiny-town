@@ -207,7 +207,7 @@
 
 		/**
 		 * Updates the global position variables
-		 * @param {event} - the event that triggers a translate
+		 * @param {event} [e] - the event that triggers a translate, not supplied when using the animate function
 		 */
 		updatePositions: function(e) {
 			var scrollDelta = e ? self.getScrollDelta(e) : 0;
@@ -330,7 +330,7 @@
 		},
 
 		/**
-		 * @param {event} [e] - the event on the container
+		 * @param {event} e - the event on the container
 		 * @return {integer} - the delta in pixels to move the container
 		 */
 		getScrollDelta: function(e) {
